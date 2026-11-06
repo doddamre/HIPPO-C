@@ -24,6 +24,7 @@ class TransitModel:
         params_dict : dict
             Dictionary containing transit parameters loaded from YAML file
         """
+        self.planet_name = params_dict.get('planet_name', 'Unknown planet')
         self.params = batman.TransitParams()
         self.params.t0 = params_dict.get('t0', 0.0)
         self.params.per = params_dict.get('per')
@@ -67,7 +68,7 @@ class TransitModel:
         
         fig, ax = plt.subplots(figsize=(10, 6))
         ax.plot(self.t, self.flux)
-        ax.set(xlabel="Time from central transit (days)", ylabel="Relative flux")
+        ax.set(xlabel="Time from central transit (days)", ylabel="Relative flux", title=f"{self.planet_name} Transit Light Curve")
         fig.tight_layout()
         fig.savefig(output_file, dpi=150)
         if show:
