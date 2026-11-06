@@ -9,4 +9,4 @@ transit:
   w: 186.6
   t0: 0.0
   limb_dark: quadratic
-  u: [0.319, 0.268]
+  u: [0.322, 0.221]
