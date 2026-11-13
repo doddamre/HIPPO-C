@@ -1,0 +1,11 @@
+depth: 10 confusion matrix:
+[[79 16]
+ [31 63]]
+Precision: 0.7974683544303798
+
+depth: 5 confusion matrix:
+[[75 20]
+ [21 73]]
+Precision: 0.7849462365591398
+The Decision tree reaches a precision slightly below the one achieved by the Random Forest at the same split
+The confusion matrices are more different. The Decision tree produces fewer false positives but misses more planets than the Random Forest. The precision of the decision tree indicates it is conservative about calling planets and recovers fewer than the Random Forest. Since our goal is to recover candidates, the Random Forest is more favourable.
