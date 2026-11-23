@@ -1,7 +1,7 @@
 """Classifier interfaces reserved for the detection course exercises."""
 
 
-from turtle import pd
+
 from pathlib import Path
 
 import matplotlib
@@ -11,14 +11,12 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import (
-    confusion_matrix, classification_report, accuracy_score,
-    roc_auc_score, roc_curve, precision_recall_curve, average_precision_score
-)
-
+from sklearn.ensemble import RandomForestClassifier as SkRandomForest
+from sklearn.metrics import (accuracy_score, average_precision_score,
+      classification_report, confusion_matrix,
+      precision_recall_curve, precision_score,
+      recall_score, roc_auc_score, roc_curve)
 import joblib
-
 from daneel.detection.data_process import create_balanced_dataset
 
 class RandomForestClassifier:
@@ -57,18 +55,17 @@ class RandomForestClassifier:
         self.model = None
         self.scaler = None
 
-    def load_data(csv_path=CSV_PATH, n_bins=1000, use_scaler=False, samples_per_class=350):
+    def load_data(self):
         print("\n" + "="*70)
         print("LOADING DATA")
         print("="*70)
     
-        df = pd.read_csv(csv_path)
+        df = pd.read_csv(self.data_path)
         print(f"Dataset: {df.shape[0]} samples")
     
-        flux_cols = [f'flux_{i:04d}' for i in range(n_bins)]
-        flux_err_cols = [f'flux_err_{i:04d}' for i in range(n_bins)]
+        flux_cols = [f'flux_{i:04d}' for i in range(self.n_bins)]
+        flux_err_cols = [f'flux_err_{i:04d}' for i in range(self.n_bins)]
         X = df[flux_cols].values
-        X_err = df[flux_err_cols].values
         y = df['label'].values
     
         print(f"  Class 0: {(y==0).sum()}, Class 1: {(y==1).sum()}")
@@ -87,7 +84,8 @@ class RandomForestClassifier:
             X_test = self.scaler.transform(X_test)
 
         print(f"Train: {X_train.shape}, Test: {X_test.shape}")
-        return X_train, X_test, y_train, y_tes
+        return X_train, X_test, y_train, y_test
+    
     def build_model(self):
         return SkRandomForest(
             random_state=self.random_state, n_jobs=-1, **self.rf_params)
@@ -124,7 +122,7 @@ class RandomForestClassifier:
             }
         return results
     
-def format_report(self, results):
+    def format_report(self, results):
         lines = ["Random Forest - TESS transit detection", "",
                  f"Hyperparameters: {self.rf_params}",
                  f"Train samples per class (augmented): {self.samples_per_class}",
@@ -142,7 +140,7 @@ def format_report(self, results):
                       "", r["report"]]
         return "\n".join(lines)
 
-def plot_all(self, y_test, results):
+    def plot_all(self, y_test, results):
         out = self.output_dir
         proba, thr = results["proba"], results["threshold"]
         cm = results["optimal"]["confusion_matrix"]
@@ -198,7 +196,7 @@ def plot_all(self, y_test, results):
         fig.savefig(out / "probability_hist_rf.png", dpi=300)
         plt.close(fig)
 
-def run(self):
+    def run(self):
         """Full pipeline: load, train, evaluate, save report/figures/model."""
         self.output_dir.mkdir(parents=True, exist_ok=True)
         X_train, X_test, y_train, y_test = self.load_data()

@@ -11,7 +11,7 @@ transit:
   limb_dark: quadratic
   u: [0.322, 0.221]
 detection:
-  data_path: tess_data.csv
+  data_path: data/tess_data.csv
   n_bins: 1000
   test_size: 0.2
   random_state: 42

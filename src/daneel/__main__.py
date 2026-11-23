@@ -35,7 +35,7 @@ def main():
         transit = TransitModel(input_pars['transit'])
         transit.plot_light_curve(args.output)
     elif args.detection == "rf":
-        from daneel.detection.classifiers import RandomForestClassifiers
+        from daneel.detection.classifiers import RandomForestClassifier
         RandomForestClassifier(input_pars['detection']).run()
     elif args.atmosphere:
         parser.error("atmospheric characterisation is not implemented yet; use --transit")

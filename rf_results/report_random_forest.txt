@@ -1,0 +1,41 @@
+Random Forest - TESS transit detection
+
+Hyperparameters: {'n_estimators': 500, 'max_depth': None, 'min_samples_leaf': 1, 'max_features': 'sqrt', 'bootstrap': True, 'class_weight': None, 'oob_score': True}
+Train samples per class (augmented): 350
+AUC-ROC: 0.8924
+OOB score: 0.8043
+
+--- default threshold = 0.5000 ---
+Confusion matrix [[TN FP] [FN TP]]:
+[[73 22]
+ [ 9 85]]
+Precision (planet) = 0.7944
+Recall (planet)    = 0.9043
+Accuracy           = 0.8360
+
+              precision    recall  f1-score   support
+
+  Non-Planet     0.8902    0.7684    0.8249        95
+      Planet     0.7944    0.9043    0.8458        94
+
+    accuracy                         0.8360       189
+   macro avg     0.8423    0.8363    0.8353       189
+weighted avg     0.8426    0.8360    0.8353       189
+
+
+--- optimal threshold = 0.3680 ---
+Confusion matrix [[TN FP] [FN TP]]:
+[[70 25]
+ [ 1 93]]
+Precision (planet) = 0.7881
+Recall (planet)    = 0.9894
+Accuracy           = 0.8624
+
+              precision    recall  f1-score   support
+
+  Non-Planet     0.9859    0.7368    0.8434        95
+      Planet     0.7881    0.9894    0.8774        94
+
+    accuracy                         0.8624       189
+   macro avg     0.8870    0.8631    0.8604       189
+weighted avg     0.8875    0.8624    0.8603       189
