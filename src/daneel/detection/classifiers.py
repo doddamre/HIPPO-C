@@ -106,7 +106,8 @@ class RandomForestClassifier:
         threshold = float(thresholds[best])
 
         results = {"proba": proba, "threshold": threshold,
-                   "auc": roc_auc_score(y_test, proba)}
+           "auc": roc_auc_score(y_test, proba),
+           "tpr": float(tpr[best]), "fpr": float(fpr[best])}
         for name, thr in (("default", 0.5), ("optimal", threshold)):
             pred = (proba >= thr).astype(int)
             results[name] = {
@@ -123,21 +124,19 @@ class RandomForestClassifier:
         return results
     
     def format_report(self, results):
-        lines = ["Random Forest - TESS transit detection", "",
-                 f"Hyperparameters: {self.rf_params}",
-                 f"Train samples per class (augmented): {self.samples_per_class}",
-                 f"AUC-ROC: {results['auc']:.4f}"]
+        d, o = results["default"], results["optimal"]
+        lines = ["Random Forest - TESS transit detection", ""]
         if getattr(self.model, "oob_score_", None) is not None:
-            lines.append(f"OOB score: {self.model.oob_score_:.4f}")
-        for name in ("default", "optimal"):
-            r = results[name]
-            lines += ["", f"--- {name} threshold = {r['threshold']:.4f} ---",
-                      "Confusion matrix [[TN FP] [FN TP]]:",
-                      str(r["confusion_matrix"]),
-                      f"Precision (planet) = {r['precision']:.4f}",
-                      f"Recall (planet)    = {r['recall']:.4f}",
-                      f"Accuracy           = {r['accuracy']:.4f}",
-                      "", r["report"]]
+            lines.append(f"OOB Score: {self.model.oob_score_:.4f}")
+        lines += [
+            f"Optimal threshold: {results['threshold']:.4f} (default=0.5)",
+            f"  At this threshold: TPR={results['tpr']:.4f}, "
+            f"FPR={results['fpr']:.4f}",
+            f"AUC-ROC: {results['auc']:.4f}",
+            f"Accuracy @0.5: {d['accuracy']:.4f} ({d['accuracy'] * 100:.2f}%)",
+            f"Accuracy @{results['threshold']:.4f}: {o['accuracy']:.4f} "
+            f"({o['accuracy'] * 100:.2f}%)",
+            "", "Classification report (optimal threshold):", o["report"]]
         return "\n".join(lines)
 
     def plot_all(self, y_test, results):
