@@ -20,7 +20,7 @@ def main():
     actions = parser.add_mutually_exclusive_group(required=True)
     actions.add_argument("-t", "--transit", action="store_true", help="Plot a transit light curve")
 
-    actions.add_argument("-d", "--detection", action="store_true", help="Run exoplanet detection")
+    actions.add_argument("-d", "--detection", type=str, choices=["rf"], help="Run exoplanet detection")
     actions.add_argument("-a", "--atmosphere", action="store_true", help="Run atmospheric characterisation")
     parser.add_argument("-o", "--output", default="lc.png", help="Output image for --transit")
 
@@ -36,7 +36,7 @@ def main():
         transit.plot_light_curve(args.output)
     elif args.detection == "rf":
         from daneel.detection.classifiers import RandomForestClassifiers
-        RandomForestClassifier(params).run()
+        RandomForestClassifier(input_pars['detection']).run()
     elif args.atmosphere:
         parser.error("atmospheric characterisation is not implemented yet; use --transit")
 

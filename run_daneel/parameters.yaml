@@ -10,3 +10,14 @@ transit:
   t0: 0.0
   limb_dark: quadratic
   u: [0.322, 0.221]
+detection:
+  data_path: tess_data.csv
+  n_bins: 1000
+  test_size: 0.2
+  random_state: 42
+  samples_per_class: 350
+  use_scaler: false
+  output_dir: rf_results
+  random_forest:
+    n_estimators: 500
+    max_depth: null
